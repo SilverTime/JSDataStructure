@@ -6,7 +6,6 @@ function BinarySearchTree() {     //create a tree obj
     };
     var root = null;
 
-//    插入
     /*
     * 插入
     * 1.构造一个新节点
@@ -52,43 +51,106 @@ function BinarySearchTree() {     //create a tree obj
     };
 
     /*先序遍历*/
-    this.preOrderTraverse = function(callback){
-        preOrderTraverseNode(root,callback);
+    this.preOrderTraverse = function (callback) {
+        preOrderTraverseNode(root, callback);
     };
-    var preOrderTraverseNode = function(node,callback){
-      if(node!==null){
-          callback(node.key);
-          preOrderTraverseNode(node.left,callback);
-          preOrderTraverseNode(node.right,callback);
-      }
+    var preOrderTraverseNode = function (node, callback) {
+        if (node !== null) {
+            callback(node.key);
+            preOrderTraverseNode(node.left, callback);
+            preOrderTraverseNode(node.right, callback);
+        }
     };
 
     /*后序遍历*/
-    this.postOrderTraverse = function(callback){
-       postOrderTraverseNode(root,callback);
+    this.postOrderTraverse = function (callback) {
+        postOrderTraverseNode(root, callback);
     };
-    var postOrderTraverseNode = function(node,callback){
-        if(node!==null){
-            postOrderTraverseNode(node.left,callback);
-            postOrderTraverseNode(node.right,callback);
+    var postOrderTraverseNode = function (node, callback) {
+        if (node !== null) {
+            postOrderTraverseNode(node.left, callback);
+            postOrderTraverseNode(node.right, callback);
             callback(node.key);
         }
+    };
+
+    /*搜索最小值
+    * 二叉搜索树的最小值为最后一层最左侧的节点
+    * */
+
+    this.min = function () {
+        return minNode(root);
+    };
+
+    var minNode = function (node) {
+        if (node) {
+            while (node && node.left !== null) {
+                node = node.left;
+            }
+            return node.key;
+        }
+        return null;
+    };
+
+
+    /*搜索最大值
+    * 二叉搜索树的最大值为最后一层最右侧的节点
+    * */
+    this.max = function () {
+        return maxNode(root);
+    };
+
+    var maxNode = function (node) {
+        if (node) {
+            while (node && node.right !== null) {
+                node = node.right;
+            }
+            return node.key;
+        }
+        return null;
+    };
+
+
+    this.search = function (key) {
+        return searchNode(root, key)
+    };
+
+    var searchNode = function (node, key) {
+        if (node === null) {    //递归出口1
+            return false
+        }
+        if (key < node.key) {
+            return searchNode(node.left, key);
+        } else if (key > node.key) {
+            return searchNode(node.right, key);
+        } else {
+            return true
+        }
     }
+
 }
+
+
 
 var tree = new BinarySearchTree();
 [3, 4, 5, 6, 34, 21, 7, 8, 14, 15, 10].forEach(function (item) {
     tree.insert(item);
 });
+console.log('前序遍历： \n');
 tree.inOrderTraverse(function (val) {
     console.log(val)
 });
-console.log('\n');
+console.log('中序遍历: \n');
 tree.preOrderTraverse(function (val) {
     console.log(val)
 });
-console.log('\n');
+console.log('后序遍历：\n');
 tree.postOrderTraverse(function (val) {
     console.log(val)
 });
+console.log('最小值和最大值：');
+console.log(tree.min());
+console.log(tree.max()+'\n');
+console.log('搜索：');
+console.log(tree.search(4)+'\n');
 
